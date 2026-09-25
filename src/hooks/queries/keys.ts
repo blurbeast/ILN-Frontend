@@ -72,4 +72,8 @@ export const QUERY_TIMINGS = {
   payerScore: { staleTime: 30_000, gcTime: 5 * 60_000 },
   /** Batch payer scores. */
   payerScores: { staleTime: 30_000, gcTime: 5 * 60_000 },
+  /** Admin action audit log — moderate refetch interval. */
+  adminActions: { staleTime: 30_000, gcTime: 5 * 60_000 },
+  /** Protocol status (pause flag) — checked periodically. */
+  protocolStatus: { staleTime: 30_000, gcTime: 5 * 60_000 },
 } as const;

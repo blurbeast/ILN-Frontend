@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 /**
  * Dark-Feature Flag-Flip Smoke Tests
@@ -48,10 +48,7 @@ function shouldRun(feature: 'insurance-pool' | 'oracle-badge' | 'invoice-nft'): 
 /**
  * Navigate to a route and assert it loaded (status < 400, main visible).
  */
-async function loadRoute(
-  page: Parameters<Parameters<typeof test>[1]>[0],
-  path: string
-): Promise<void> {
+async function loadRoute(page: Page, path: string): Promise<void> {
   const response = await page.goto(`${BASE_URL}${path}`, { waitUntil: 'domcontentloaded' });
   expect(response?.status(), `Expected ${path} to return HTTP < 400`).toBeLessThan(400);
   await expect(page.getByRole('main').first()).toBeVisible({ timeout: 20_000 });

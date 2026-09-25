@@ -24,7 +24,7 @@ export interface AlertRoutingEvent {
   summary: string;
   /** Free-form context: canary run id, Instatus incident id, affected route, etc. */
   detail?: Record<string, unknown>;
-  source: 'frontend-synthetic-canary' | 'frontend-instatus-webhook';
+  source: 'frontend-synthetic-canary' | 'frontend-instatus-webhook' | 'smart-contract-health-check';
   timestamp: string;
 }
 
