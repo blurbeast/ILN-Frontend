@@ -100,18 +100,19 @@ export default function DefaultRateChart() {
   const [unavailable, setUnavailable] = useState(false);
   const [requestId, setRequestId] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const baseUrl = process.env.NEXT_PUBLIC_INDEXER_API_URL ?? 'https://api.iln.example.com';
-        // eslint-disable-next-line no-restricted-globals, no-restricted-syntax -- Legacy inline exception pending query hook migration
-        const res = await fetch(`${baseUrl}/analytics/defaults?period=12m`);
-        if (!res.ok) throw new Error('Failed to fetch');
-        const json = await res.json();
-        const withMA = calculateMovingAverage(json.monthly || json, 1);
-        setChartData(withMA);
-      } catch {
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setUnavailable(false);
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_INDEXER_API_URL ?? 'https://api.iln.example.com';
+      // eslint-disable-next-line no-restricted-globals, no-restricted-syntax -- Legacy inline exception pending query hook migration
+      const res = await fetch(`${baseUrl}/analytics/defaults?period=12m`);
+      if (!res.ok) throw new Error('Failed to fetch');
+      const json = await res.json();
+      const withMA = calculateMovingAverage(json.monthly || json, 1);
+      setChartData(withMA);
+    } catch {
+      if (shouldUseDevMockFallback()) {
         const mockData = generateMockDefaults();
         const withMA = calculateMovingAverage(mockData, 1);
         setChartData(withMA);
