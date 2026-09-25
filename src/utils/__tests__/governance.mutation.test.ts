@@ -19,6 +19,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
+import { rpc, nativeToScVal } from '@stellar/stellar-sdk';
 import {
   castVote,
   createProposal,
@@ -152,15 +153,28 @@ describe('governance.vetoProposal', () => {
   });
 
   it('throws when the proposal does not exist', async () => {
-    await expect(
-      vetoProposal(999_999, '0xreason', SIGNER, signTx)
-    ).rejects.toThrow(/proposal not found/i);
+    await expect(vetoProposal(999_999, '0xreason', SIGNER, signTx)).rejects.toThrow(
+      /proposal not found/i
+    );
   });
 });
 
 describe('governance.getVotingPower', () => {
   it('resolves a positive voting power for any address', async () => {
+    const mockSimulate = vi
+      .spyOn(rpc.Server.prototype, 'simulateTransaction')
+      .mockResolvedValueOnce({
+        error: undefined,
+        transactionData: {} as any,
+        minResourceFee: '100',
+        events: [],
+        result: {
+          retval: nativeToScVal(1250),
+        },
+      } as any);
+
     const power = await getVotingPower(SIGNER);
+    mockSimulate.mockRestore();
     expect(power).toBeGreaterThan(0);
   });
 });
