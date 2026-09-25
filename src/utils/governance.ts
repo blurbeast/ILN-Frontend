@@ -591,12 +591,12 @@ export async function getVotingPower(address: string): Promise<number> {
       buildTokenReadTransaction(ILN_TOKEN_CONTRACT_ID, 'balance', params)
     );
     if (!rpc.Api.isSimulationSuccess(callResult) || !callResult.result?.retval) {
-      return 1250;
+      return 0;
     }
     const balance = BigInt(scValToNative(callResult.result.retval));
     return Number(balance);
   } catch {
-    return 1250;
+    return 0;
   }
 }
 
