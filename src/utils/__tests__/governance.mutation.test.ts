@@ -31,7 +31,7 @@ import {
 } from '../governance';
 
 const signTx = vi.fn(async (xdr: string) => `signed-${xdr}`);
-const SIGNER = 'GABCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const SIGNER = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
 
 describe('governance.castVote (critical path)', () => {
   it('records a For vote and increments votesFor', async () => {
